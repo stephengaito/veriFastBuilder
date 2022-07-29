@@ -1,0 +1,11 @@
+--- a/build.sh	2022-07-29 19:41:20.511027512 +0100
++++ b/build.sh	2022-07-29 21:46:59.971414383 +0100
+@@ -18,7 +18,7 @@
+
+     VFDEPS_DIR=$VFDEPS_PARENT_DIR/$VFDEPS_DIRNAME
+
+-    make PREFIX=$VFDEPS_DIR JOBS=$(cat /proc/cpuinfo | grep 'processor' | wc -l)
++    make PREFIX=$VFDEPS_DIR --jobs=$(cat /proc/cpuinfo | grep 'processor' | wc -l)
+
+ elif [ $(uname -s) = "Darwin" ]; then
+
