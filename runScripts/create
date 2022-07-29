@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# This bash script uses podman build to build a container suitable for
+# building verifast.
+
+if podman image exists verifastbuilderimage ; then
+  echo "verifastbuilderimage already exists"
+  echo ""
+  echo "nothing to do"
+  echo ""
+  echo "to remove this image type:"
+  echo "   podman image rm verifastbuilderimage"
+  echo ""
+  exit 1
+fi
+
+podman build container --tag verifastbuilderimage

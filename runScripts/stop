@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# This bash script uses podman to stop an existing container
+
+podman container stop verifastbuilder

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# This bash script automates the build of the vfdeps dependencies
+
+git clone --depth 1 https://github.com/verifast/vfdeps.git
+
+cd vfdeps
+
+./setup-build.sh
+
+./build.sh
+
