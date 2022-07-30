@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# This bash script automates the build of the vfdeps dependencies
+
+if [[ ! -d vfdeps ]] ; then
+  git clone --depth 1 https://github.com/verifast/vfdeps.git
+fi
+
+cd vfdeps
+
+if [[ ! -f build.sh.patched ]] ; then
+  patch --strip=1 < ../buildScripts/vfdeps-build.sh.patch
+  touch build.sh.patched
+fi
+
+./setup-build.sh
+
+./build.sh
+
