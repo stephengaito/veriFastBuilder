@@ -1,5 +1,6 @@
 tarFiles/*.txz
 vfdeps
+vf-llvm-clang-build
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

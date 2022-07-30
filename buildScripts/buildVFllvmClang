@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# This bash script automates the build of the vf-llvm-clang-build tool
+
+LLVM_VERSION="13.0.0"
+
+TOOL_VERSION="aafd059"
+
+COMMON_CMAKE_VARS="-DLLVM_ENABLE_PROJECTS=clang -DLLVM_BUILD_TOOLS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DLLVM_BUILD_LLVM_DYLIB=OFF -DLLVM_ENABLE_BINDINGS=OFF -DLLVM_ENABLE_FFI=OFF -DLLVM_ENABLE_ZLIB=OFF DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_TERMINFO=OFF"
+
+PACKAGE_NAME=vf-llvm-clang-build-$TOOL_VERSION
+
+apt install ninja-build cmake
+
+mkdir vf-llvm-clang-build
+cd vf-llvm-clang-build
+
+git clone --depth 1 --branch llvmorg-${LLVM_VERSION} https://github.com/llvm/llvm-project
+
+mkdir build
+mkdir $PACKAGE_NAME
+
+cd build
+mkdir Release
+cmake -G Ninja ${COMMON_CMAKE_VARS} -DCMAKE_INSTALL_PREFIX=../${PACKAGE_NAME} ../llvm-project/llvm
+cmake --build . --target install --config Release
+
+cd ..
+tar -cvzf ${PACKAGE_NAME}-linux.tar.gz ${PACKAGE_NAME}
+shasum -a 256 ${PACKAGE_NAME}-linux.tar.gz
+          
