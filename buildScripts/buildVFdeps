@@ -8,12 +8,21 @@ fi
 
 cd vfdeps
 
-if [[ ! -f build.sh.patched ]] ; then
-  patch --strip=1 < ../buildScripts/vfdeps-build.sh.patch
-  touch build.sh.patched
-fi
+#./setup-build.sh
+#
+echo "tzdata tzdata/Areas select Europe" > preSeed.txt
+echo "tzdata tzdata/Zones/Europe select London" >> preSeed.txt
+debconf-set-selections preSeed.txt
+rm -rf /etc/timezone
+rm -rf /etc/localtime
 
-./setup-build.sh
+apt-get update
+apt-get install -y --no-install-recommends \
+  git wget ca-certificates make m4 \
+  gcc g++ patch unzip libgtk2.0-dev \
+  valac libgtksourceview2.0-dev
 
-./build.sh
+# ./build.sh
+#
+#make PREFIX=/usr/local JOBS=$(nproc) --jobs=$(nproc)
 

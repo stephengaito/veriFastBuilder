@@ -1,0 +1,11 @@
+--- a/Makefile	2022-07-31 17:13:51.066857134 +0100
++++ b/Makefile	2022-07-31 15:23:34.057393659 +0100
+@@ -289,7 +289,7 @@
+ cppo-$(CPPO_VERSION): cppo-$(CPPO_VERSION).tar.gz
+ 	tar xzf $<
+
+-$(CPPO_BINARY): $(DUNE_BINARY) | cppo-$(CPPO_VERSION)
++$(CPPO_BINARY): $(OCAMLBUILD_BINARY) $(DUNE_BINARY) | cppo-$(CPPO_VERSION)
+ 	cd $| && dune build && dune install
+
+ cppo: $(CPPO_BINARY)
