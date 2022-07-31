@@ -29,7 +29,9 @@ esac
 
 JOBS_LIMIT=1
 
-apt install ninja-build cmake
+apt-get update
+apt-get install -y --no-install-recommends \
+  ninja-build cmake
 
 mkdir -p vf-llvm-clang-build
 cd vf-llvm-clang-build
