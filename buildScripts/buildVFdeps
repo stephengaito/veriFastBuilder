@@ -8,6 +8,10 @@ fi
 
 cd vfdeps
 
+if test -z "$(grep OCAMLBUILD_BINARY Makefile | grep  CPPO_BINARY)" ; then
+  echo patch --strip=1 < ../buildScripts/vfdeps-Makefile.patch
+fi
+
 #./setup-build.sh
 #
 echo "tzdata tzdata/Areas select Europe" > preSeed.txt
@@ -22,7 +26,18 @@ apt-get install -y --no-install-recommends \
   gcc g++ patch unzip libgtk2.0-dev \
   valac libgtksourceview2.0-dev
 
+
+
 # ./build.sh
 #
-#make PREFIX=/usr/local JOBS=$(nproc) --jobs=$(nproc)
+make PREFIX=/usr/local JOBS=$(nproc) --jobs=$(nproc)
 
+if ! $? ; then
+  echo make result: 1
+
+  # for some reason... we need to do this twice ;-(
+  #
+  make PREFIX=/usr/local JOBS=$(nproc) --jobs=$(nproc)
+
+  echo make result: $?
+fi

@@ -8,16 +8,16 @@ TOOL_VERSION="aafd059"
 
 JOBS_LIMIT=$(nproc)
 
-# On a small raspberry using all of the cores over heats the CPU when 
-# compiling the large code base of llvm... so if we limit the number of 
-# jobs to one or two cores, while we compile slower overall, we keep a 
+# On a small raspberry using all of the cores over heats the CPU when
+# compiling the large code base of llvm... so if we limit the number of
+# jobs to one or two cores, while we compile slower overall, we keep a
 # stable machine which *can* compile the code base...
 #
 ARM_JOBS_LIMIT=1
 
 COMMON_CMAKE_VARS="-DLLVM_ENABLE_PROJECTS=clang -DLLVM_BUILD_TOOLS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DLLVM_BUILD_LLVM_DYLIB=OFF -DLLVM_ENABLE_BINDINGS=OFF -DLLVM_ENABLE_FFI=OFF -DLLVM_ENABLE_ZLIB=OFF DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_TERMINFO=OFF"
 
-PACKAGE_NAME=vf-llvm-clang-build-$TOOL_VERSION
+#PACKAGE_NAME=vf-llvm-clang-build-$TOOL_VERSION
 
 # enforce any jobs limits
 #
@@ -26,6 +26,8 @@ case $(uname -m) in
     JOBS_LIMIT=$ARM_JOBS_LIMIT
     ;;
 esac
+
+JOBS_LIMIT=1
 
 apt install ninja-build cmake
 
@@ -42,14 +44,13 @@ if [[ ! -d build ]] ; then
   mkdir build
   cd build
   mkdir -p Release
-  cmake -G Ninja ${COMMON_CMAKE_VARS} -DCMAKE_INSTALL_PREFIX=../${PACKAGE_NAME} ../llvm-project/llvm
+  cmake -G Ninja ${COMMON_CMAKE_VARS} -DCMAKE_INSTALL_PREFIX=/usr/local ../llvm-project/llvm
 else
   cd build
-fi 
+fi
 
 cmake --build . --target install --config Release -j $JOBS_LIMIT
 
-cd ..
-tar -cvzf ${PACKAGE_NAME}-linux.tar.gz ${PACKAGE_NAME}
-shasum -a 256 ${PACKAGE_NAME}-linux.tar.gz
-          
+#cd ..
+#tar -cvzf ${PACKAGE_NAME}-linux.tar.gz ${PACKAGE_NAME}
+#shasum -a 256 ${PACKAGE_NAME}-linux.tar.gz
