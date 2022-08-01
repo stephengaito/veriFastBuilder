@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# This bash script uses podman build a container suitable for
+# running verifast on a day to day basis.
+
+if podman image exists verifastimage ; then
+  echo "verifastimage already exists"
+  echo ""
+  echo "nothing to do"
+  echo ""
+  echo "to remove this image type:"
+  echo "   podman image rm verifastimage"
+  echo ""
+  exit 1
+fi
+
+cp ../tarFiles/verifast-*-nightly.tar.gz \
+ container/verifast-nightly.tar.gz
+
+podman build container --tag verifastimage

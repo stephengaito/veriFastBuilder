@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# This bash script starts an existing verifast container
+
+if ! podman image exists verifastimage ; then
+  echo "no verifast image exists yet"
+  echo ""
+  echo "create one using the './runScripts/create' command"
+  echo ""
+  exit 1
+fi
+
+if podman container exists verifast ; then
+  podman container rm verifast
+fi
+
+podman container run --interactive --tty \
+  --volume $PWD:/common \
+  --volume /tmp/.X11-unix:/tmp/.X11-unix \
+  --env DISPLAY=$DISPLAY \
+  --workdir /common \
+  --name verifast \
+  verifastimage \
+  /verifast-1457d1b/bin/vfide $*

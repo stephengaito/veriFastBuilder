@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# This bash script uses podman to enter an already running verifast
+# container.
+
+if ! podman container exists verifast ; then
+  echo "no verifast container exists yet"
+  echo ""
+  echo "create one using the './runScripts/create' command"
+  echo ""
+  exit 1
+fi
+
+podman container exec -it verifast /bin/bash
