@@ -1,6 +1,7 @@
 verifast
 _build
 tarFiles/*.txz
+tarFiles/*.tar.*
 vfdeps
 vf-llvm-clang-build
 
