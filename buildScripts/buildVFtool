@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# This bash script builds the verifast tool itself
+
+apt-get update
+apt-get install -y --no-install-recommends \
+  git wget ca-certificates m4 \
+  patch unzip libgtk2.0-dev \
+  valac libgtksourceview2.0-dev \
+  cmake build-essential
+
+if [[ ! -d verifast ]] ; then
+  git clone --depth 1 https://github.com/verifast/verifast.git
+fi
+
+cd verifast/src
+
+verifastDir=$(pwd)
+
+mkdir -p cxx_frontend/ast_exporter/build
+pushd cxx_frontend/ast_exporter/build
+
+cmake -DLLVM_INSTALL_DIR=/usr/local -DVFDEPS=/usr/local -DCMAKE_BUILD_TYPE=Release ..
+
+popd
+
+make nightly VERBOSE=yes
