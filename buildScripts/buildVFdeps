@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# This bash script automates the build of the vfdeps dependencies
+JOBS_LIMIT=$(nproc)
+JOBS_LIMIT=1
 
+# This bash script automates the build of the vfdeps dependencies
+#
 if [[ ! -d vfdeps ]] ; then
   git clone --depth 1 https://github.com/verifast/vfdeps.git
 fi
@@ -9,7 +12,7 @@ fi
 cd vfdeps
 
 if test -z "$(grep OCAMLBUILD_BINARY Makefile | grep  CPPO_BINARY)" ; then
-  echo patch --strip=1 < ../buildScripts/vfdeps-Makefile.patch
+  patch --strip=1 < ../buildScripts/vfdeps-Makefile.patch
 fi
 
 #./setup-build.sh
@@ -30,14 +33,19 @@ apt-get install -y --no-install-recommends \
 
 # ./build.sh
 #
-make PREFIX=/usr/local JOBS=$(nproc) --jobs=$(nproc)
+make PREFIX=/usr/local JOBS=$JOBS_LIMIT --jobs=$JOBS_LIMIT
 
 if ! $? ; then
+  echo ""
+  echo "-----------------------------------------------------------"
   echo make result: 1
+  echo "-----------------------------------------------------------"
+  echo ""
 
-  # for some reason... we need to do this twice ;-(
+  echo "for some reason... we need to do this twice"
+  echo ""
   #
-  make PREFIX=/usr/local JOBS=$(nproc) --jobs=$(nproc)
+  make PREFIX=/usr/local JOBS=$JOBS_LIMIT --jobs=$JOBS_LIMIT
 
   echo make result: $?
 fi
