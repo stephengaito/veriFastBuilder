@@ -13,9 +13,15 @@ if [[ ! -d verifast ]] ; then
   git clone --depth 1 https://github.com/verifast/verifast.git
 fi
 
-cd verifast/src
+pushd verifast/src/linux
 
-verifastDir=$(pwd)
+if test -z "$(grep __ARM_64BIT_STATE caml_stopwatch.c)" ; then
+  patch --strip=1 < ../../../buildScripts/caml_stopwatch.c.patch
+fi
+
+popd
+
+cd verifast/src
 
 mkdir -p cxx_frontend/ast_exporter/build
 pushd cxx_frontend/ast_exporter/build
