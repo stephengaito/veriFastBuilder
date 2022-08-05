@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# This bash script uses deletes an existing container/image
+
+if podman container exists verifastxbuilder ; then
+  podman container rm verifastxbuilder
+fi
+
+if podman image exists verifastxbuilderimage ; then
+  podman image rm verifastxbuilderimage
+fi

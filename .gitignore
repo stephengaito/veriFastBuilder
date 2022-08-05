@@ -1,10 +1,14 @@
+*.smt2
 tutorial
-verifast
 _build
 *.txz
 *.tar.*
+aarch64-vfdeps
 vfdeps
+aarch64-vf-llvm-clang-build
 vf-llvm-clang-build
+aarch64-verifast
+verifast
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

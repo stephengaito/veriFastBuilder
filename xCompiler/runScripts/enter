@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# This bash script uses podman to enter an already running verifast
+# builder container.
+
+if ! podman container exists verifastxbuilder ; then
+  echo "no verifast x-builder container exists yet"
+  echo ""
+  echo "create one using the './scripts/create' command"
+  echo ""
+  exit 1
+fi
+
+podman container exec -it verifastxbuilder /bin/bash

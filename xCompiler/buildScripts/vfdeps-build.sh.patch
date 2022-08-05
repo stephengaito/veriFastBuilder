@@ -1,0 +1,20 @@
+--- a/build.sh	2022-07-31 09:04:43.396404525 +0100
++++ b/build.sh	2022-07-31 09:06:41.738956421 +0100
+@@ -8,7 +8,7 @@
+ VFDEPS_DIRNAME=vfdeps-$VFDEPS_VERSION
+
+ BUILD_DIR=`pwd`
+-mkdir upload
++mkdir -p upload
+ UPLOAD_DIR=$BUILD_DIR/upload
+
+ if [ $(uname -s) = "Linux" ]; then
+@@ -18,7 +18,7 @@
+
+     VFDEPS_DIR=$VFDEPS_PARENT_DIR/$VFDEPS_DIRNAME
+
+-    make PREFIX=$VFDEPS_DIR JOBS=$(cat /proc/cpuinfo | grep 'processor' | wc -l)
++    make PREFIX=$VFDEPS_DIR --jobs=$(cat /proc/cpuinfo | grep 'processor' | wc -l)
+
+ elif [ $(uname -s) = "Darwin" ]; then
+

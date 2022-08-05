@@ -1,0 +1,80 @@
+#!/bin/bash
+
+cd xCompiler
+
+JOBS_LIMIT=$(nproc)
+JOBS_LIMIT=1
+
+# This bash script automates the build of the vfdeps dependencies
+#
+if [[ ! -d vfdeps ]] ; then
+  git clone --depth 1 https://github.com/verifast/vfdeps.git
+fi
+
+cp -R vfdeps aarch64Vfdeps
+
+cd vfdeps
+
+if test -z "$(grep OCAMLBUILD_BINARY Makefile | grep  CPPO_BINARY)" ; then
+  patch --strip=1 < ../buildScripts/vfdeps-Makefile.patch
+fi
+
+#./setup-build.sh
+#
+#echo "tzdata tzdata/Areas select Europe" > preSeed.txt
+#echo "tzdata tzdata/Zones/Europe select London" >> preSeed.txt
+#debconf-set-selections preSeed.txt
+#rm -rf /etc/timezone
+#rm -rf /etc/localtime
+
+apt-get update
+apt-get install -y --no-install-recommends \
+  git wget ca-certificates make m4 \
+  gcc g++ patch unzip libgtk2.0-dev \
+  valac libgtksourceview2.0-dev
+
+
+
+# ./build.sh
+#
+make PREFIX=/usr/local JOBS=$JOBS_LIMIT --jobs=$JOBS_LIMIT
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo ""
+  echo "-----------------------------------------------------------"
+  echo make result: $RESULT
+  echo "-----------------------------------------------------------"
+  echo ""
+
+  echo "for some reason... we need to do this twice"
+  echo ""
+  #
+  make PREFIX=/usr/local JOBS=$JOBS_LIMIT --jobs=$JOBS_LIMIT
+
+  echo make result: $?
+fi
+
+cd ../aarch64Vfdeps
+
+# ./build.sh
+#
+mkdir -p /aarch64/usr/local
+export CC=aarch64-linux-gnu-gcc
+make PREFIX=/aarch64/usr/local JOBS=$JOBS_LIMIT --jobs=$JOBS_LIMIT
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo ""
+  echo "-----------------------------------------------------------"
+  echo make result: $RESULT
+  echo "-----------------------------------------------------------"
+  echo ""
+
+  echo "for some reason... we need to do this twice"
+  echo ""
+  #
+  make PREFIX=/usr/local JOBS=$JOBS_LIMIT --jobs=$JOBS_LIMIT
+
+  echo make result: $?
+fi
